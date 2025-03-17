@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Giỏ hàng</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #1e1e2e;
+        color: #ffffff;
+        text-align: center;
+        margin: 0;
+        padding: 20px;
+      }
+      h1 {
+        color: #ff4081;
+        font-size: 2rem;
+      }
+      table {
+        width: 80%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background: #2c2c3a;
+        box-shadow: 0px 0px 10px rgba(255, 64, 129, 0.5);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid #444;
+      }
+      th {
+        background: #ff4081;
+        color: #fff;
+        font-size: 1.2rem;
+      }
+      img {
+        border-radius: 8px;
+        transition: transform 0.3s;
+      }
+      img:hover {
+        transform: scale(1.1);
+      }
+      input[type="number"] {
+        width: 50px;
+        padding: 5px;
+        text-align: center;
+        border-radius: 5px;
+      }
+      button {
+        background: #ff4081;
+        border: none;
+        padding: 10px 15px;
+        color: white;
+        font-weight: bold;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+      button:hover {
+        background: #e60073;
+      }
+      .total {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-top: 20px;
+      }
+      a {
+        text-decoration: none;
+        color: #ff4081;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>🛒 Giỏ hàng của bạn</h1>
+    {% if cart_items %}
+    <table>
+      <tr>
+        <th>Ảnh</th>
+        <th>Tên sản phẩm</th>
+        <th>Giá</th>
+        <th>Số lượng</th>
+        <th>Tổng tiền</th>
+        <th>Hành động</th>
+      </tr>
+      {% for item in cart_items %}
+      <tr>
+        <td>
+          <img
+            src="{{ url_for('static', filename='images/' + item[3]) }}"
+            alt="{{ item[1] }}"
+            width="80"
+          />
+        </td>
+        <td>{{ item[1] }}</td>
+        <td>{{ item[2] }} VNĐ</td>
+        <td>
+          <form
+            action="{{ url_for('update_cart', cart_id=item[0]) }}"
+            method="post"
+          >
+            <input
+              type="number"
+              name="quantity"
+              value="{{ item[4] }}"
+              min="1"
+            />
+            <button type="submit">✔️</button>
+          </form>
+        </td>
+        <td>{{ item[2] * item[4] }} VNĐ</td>
+        <td>
+          <form
+            action="{{ url_for('remove_from_cart', cart_id=item[0]) }}"
+            method="post"
+          >
+            <button type="submit">❌</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </table>
+    <div class="total">💰 Tổng tiền: {{ total_price }} VNĐ</div>
+    <form action="/checkout" method="post">
+      <button type="submit">✅ Thanh toán</button>
+    </form>
+    {% else %}
+    <p>Giỏ hàng của bạn đang trống.</p>
+    {% endif %}
+    <br />
+    <a href="/">🏠 Quay lại trang chủ</a>
+  </body>
+</html>

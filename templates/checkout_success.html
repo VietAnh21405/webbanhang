@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thanh toán thành công</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding: 50px;
+      }
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+      }
+      .success-message {
+        color: green;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .order-details {
+        margin-top: 20px;
+        text-align: left;
+      }
+      .back-btn {
+        margin-top: 20px;
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #28a745;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .back-btn:hover {
+        background-color: #218838;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="success-message">🎉 Thanh toán thành công!</h2>
+      <p>Cảm ơn bạn đã mua hàng. Dưới đây là thông tin đơn hàng của bạn:</p>
+
+      <div class="order-details">
+        <ul>
+          {% for item in cart_items %}
+          <li>{{ item[0] }} - {{ item[2] }} x {{ item[1] }}đ</li>
+          {% endfor %}
+        </ul>
+        <p><strong>Tổng tiền: {{ total_price }}đ</strong></p>
+      </div>
+
+      <a href="{{ url_for('dashboard') }}" class="back-btn">Tiếp tục mua sắm</a>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản lý sản phẩm</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style_quanly.css') }}"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      .container {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 900px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+      }
+
+      h2 {
+        color: #007bff;
+      }
+
+      .actions {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+      }
+
+      .btn {
+        padding: 10px 15px;
+        text-decoration: none;
+        color: white;
+        background: #007bff;
+        border-radius: 5px;
+        transition: 0.3s;
+        border: none;
+        cursor: pointer;
+      }
+
+      .btn:hover {
+        background: #0056b3;
+      }
+
+      .logout {
+        background: #f44336;
+      }
+
+      .logout:hover {
+        background: #d32f2f;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 10px;
+      }
+
+      th,
+      td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+      }
+
+      th {
+        background: #007bff;
+        color: white;
+      }
+
+      img {
+        width: 50px;
+        border-radius: 5px;
+      }
+
+      .edit,
+      .delete {
+        cursor: pointer;
+        padding: 5px 10px;
+        border-radius: 5px;
+        transition: 0.3s;
+      }
+
+      .floating-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #007bff;
+        color: white;
+        padding: 12px 18px;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: 0.3s;
+      }
+
+      .floating-btn:hover {
+        background: #0056b3;
+      }
+
+      .edit {
+        color: #28a745;
+      }
+
+      .delete {
+        color: #dc3545;
+      }
+
+      .edit:hover {
+        background: #28a745;
+        color: white;
+      }
+
+      .delete:hover {
+        background: #dc3545;
+        color: white;
+      }
+
+      /* Modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
+
+      .modal-content {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 400px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        text-align: left;
+      }
+
+      .modal h3 {
+        margin-top: 0;
+        color: #007bff;
+      }
+
+      .modal label {
+        font-weight: bold;
+      }
+
+      .modal input {
+        width: 100%;
+        padding: 8px;
+        margin: 5px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      .modal button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .save-btn {
+        background: #007bff;
+        color: white;
+      }
+
+      .save-btn:hover {
+        background: #0056b3;
+      }
+
+      .close-btn {
+        background: #f44336;
+        color: white;
+      }
+
+      .close-btn:hover {
+        background: #d32f2f;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Quản lý Sản phẩm</h2>
+      <div class="actions">
+        <a href="/admin_add_product" class="floating-btn">+ Thêm sản phẩm</a>
+        <a href="/admin_logout" class="btn logout">Đăng xuất</a>
+      </div>
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Tên</th>
+          <th>Mô tả</th>
+          <th>Giá</th>
+          <th>Hình ảnh</th>
+          <th>Hành động</th>
+        </tr>
+        {% for product in products %}
+        <tr>
+          <td>{{ product[0] }}</td>
+          <td>{{ product[1] }}</td>
+          <td>{{ product[2] }}</td>
+          <td>{{ product[3] }} VNĐ</td>
+          <td>
+            <img
+              src="{{ url_for('static', filename='images/' + product[4]) }}"
+              alt="Sản phẩm"
+            />
+          </td>
+          <td>
+            <span
+              class="edit"
+              onclick="showEditForm('{{ product[0] }}', '{{ product[1] }}', '{{ product[2] }}', '{{ product[3] }}', '{{ product[4] }}')"
+              >Sửa</span
+            >
+            <span class="delete">Xóa</span>
+          </td>
+        </tr>
+        {% endfor %}
+      </table>
+    </div>
+
+    <!-- Modal chỉnh sửa -->
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <h3>Chỉnh sửa sản phẩm</h3>
+        <form id="editForm" method="post" action="/admin_edit_product">
+          <input type="hidden" id="editId" name="id" />
+          <label for="editName">Tên sản phẩm:</label>
+          <input type="text" id="editName" name="name" required />
+
+          <label for="editDescription">Mô tả:</label>
+          <input type="text" id="editDescription" name="description" required />
+
+          <label for="editPrice">Giá:</label>
+          <input type="number" id="editPrice" name="price" required />
+
+          <label for="editImage">Hình ảnh:</label>
+          <input type="text" id="editImage" name="image" required />
+
+          <button type="submit" class="save-btn">Lưu thay đổi</button>
+          <button type="button" class="close-btn" onclick="closeEditForm()">
+            Hủy
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      function showEditForm(id, name, description, price, image) {
+        document.getElementById("editId").value = id;
+        document.getElementById("editName").value = name;
+        document.getElementById("editDescription").value = description;
+        document.getElementById("editPrice").value = price;
+        document.getElementById("editImage").value = image;
+        document.getElementById("editModal").style.display = "flex";
+      }
+
+      function closeEditForm() {
+        document.getElementById("editModal").style.display = "none";
+      }
+    </script>
+  </body>
+</html>

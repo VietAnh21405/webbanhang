@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thêm Sản Phẩm</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Thêm Sản Phẩm</h2>
+      <form action="/admin_add_product" method="post">
+        <label for="name">Tên sản phẩm:</label>
+        <input type="text" id="name" name="name" required />
+
+        <label for="description">Mô tả:</label>
+        <textarea id="description" name="description" required></textarea>
+
+        <label for="price">Giá:</label>
+        <input type="number" id="price" name="price" required />
+
+        <label for="image">Hình ảnh (URL hoặc tên file):</label>
+        <input type="text" id="image" name="image" required />
+
+        <button type="submit">Thêm sản phẩm</button>
+      </form>
+    </div>
+  </body>
+</html>

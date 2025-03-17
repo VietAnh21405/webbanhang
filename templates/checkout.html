@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thanh toán thành công</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin: 50px;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        border: 1px solid #ddd;
+        padding: 20px;
+        border-radius: 10px;
+        background-color: #f9f9f9;
+      }
+      h2 {
+        color: green;
+      }
+      .product {
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Thanh toán thành công!</h2>
+      <p>Cảm ơn bạn đã mua hàng.</p>
+
+      <h3>Sản phẩm đã mua:</h3>
+      {% for item in cart_items %}
+      <div class="product">
+        <strong>{{ item[0] }}</strong> - {{ item[1] }}₫ x {{ item[2] }}
+      </div>
+      {% endfor %}
+
+      <h3>Tổng tiền: {{ total_price }}₫</h3>
+
+      <a href="{{ url_for('dashboard') }}">Quay về trang chủ</a>
+    </div>
+  </body>
+</html>

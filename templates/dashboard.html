@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trang Chính</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container">
+        <a class="navbar-brand" href="#">🛒 Trang Chính</a>
+        <a class="btn btn-outline-light" href="/logout">Đăng xuất</a>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      <h1 class="text-center">🛍️ Danh sách sản phẩm</h1>
+
+      <div class="row">
+        {% for product in products %}
+        <div class="col-md-4">
+          <div class="card mb-4 shadow-sm">
+            <img
+              src="{{ url_for('static', filename='images/' ~ product[4]) }}"
+              class="card-img-top"
+              alt="Sản phẩm"
+            />
+            <div class="card-body">
+              <h5 class="card-title">{{ product[1] }}</h5>
+              <p class="card-text">{{ product[2] }}</p>
+              <h6 class="text-danger">{{ product[3] }} VNĐ</h6>
+              <div class="d-flex justify-content-between">
+                <form action="/add_to_cart/{{ product[0] }}" method="post">
+                  <button class="btn btn-primary">🛒 Thêm vào giỏ</button>
+                </form>
+                <form action="/remove_from_cart/{{ product[0] }}" method="post">
+                  <button class="btn btn-danger">❌ Xóa</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <h2 class="mt-4">📦 Thanh toán</h2>
+      <form
+        action="/checkout"
+        method="post"
+        class="p-4 border rounded bg-light"
+      >
+        <div class="mb-3">
+          <label class="form-label">📍 Địa chỉ nhận hàng:</label>
+          <input type="text" name="address" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">📞 Số điện thoại:</label>
+          <input type="text" name="phone" class="form-control" required />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">💳 Phương thức thanh toán:</label>
+          <select name="payment_method" class="form-select" required>
+            <option value="cod">Thanh toán khi nhận hàng (COD)</option>
+            <option value="bank">Chuyển khoản ngân hàng</option>
+            <option value="momo">Ví MoMo</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">
+          ✅ Xác nhận mua hàng
+        </button>
+      </form>
+    </div>
+
+    <footer class="text-center mt-4 p-3 bg-dark text-light">
+      &copy; 2025 - Website thương mại điện tử
+    </footer>
+  </body>
+</html>
